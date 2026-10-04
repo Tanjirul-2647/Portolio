@@ -1,0 +1,78 @@
+:root {
+  /* ============================================================
+     DESIGN SYSTEM TOKENS - REGROWTH BOTANICAL PALETTE
+     Inspiration: ReGrowth Color Palette 1/9
+     Colors:
+       - #1B2922: Deep Dark Pine / Forest Canvas
+       - #1C1C1C: Deep Charcoal Near-Black Contrast
+       - #4A6958: Mineral Botanical Green Accent
+       - #435146: Muted Olive Slate Secondary
+     ============================================================ */
+
+  /* The 4 Specific Inspiration Palette Colors */
+  --regrowth-dark-pine: #1b2922;
+  --regrowth-charcoal: #1c1c1c;
+  --regrowth-forest: #4a6958;
+  --regrowth-sage: #435146;
+
+  /* Neutral Background Scales */
+  --bg-canvas: #1b2922;
+  --bg-subtle: #16221c;
+  --bg-muted: #1c2b23;
+  --bg-card: #203128;
+  --bg-card-hover: #263b30;
+
+  /* Typography / Text Scales */
+  --text-primary: #f2f6f3;    /* Crisp Botanical Pale Mist */
+  --text-secondary: #cad7ce;  /* Soft Readable Sage Mist */
+  --text-muted: #8e9f94;      /* Subtitles, captions, dates */
+  --text-inverse: #1b2922;
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(74, 105, 88, 0.25);
+  --border-medium: rgba(74, 105, 88, 0.45);
+  --border-focus: #4a6958;
+
+  /* Brand Accents */
+  --brand-navy: #1c1c1c;
+  --brand-cobalt: #4a6958;
+  --brand-cobalt-hover: #587c69;
+  --brand-cobalt-light: rgba(74, 105, 88, 0.2);
+  --brand-cobalt-border: rgba(74, 105, 88, 0.5);
+
+  /* Botanical Accents */
+  --accent-emerald: #4a6958;
+  --accent-emerald-light: rgba(74, 105, 88, 0.2);
+  --accent-emerald-border: #435146;
+  --accent-emerald-text: #b5cdc0;
+
+  --accent-purple: #435146;
+  --accent-purple-light: rgba(67, 81, 70, 0.25);
+  --accent-purple-border: rgba(67, 81, 70, 0.45);
+
+  /* Shadows - Ambient Deep Forest Shadows */
+  --shadow-xs: 0 1px 2px rgba(12, 20, 16, 0.35);
+  --shadow-sm: 0 2px 6px rgba(12, 20, 16, 0.4);
+  --shadow-md: 0 8px 16px -2px rgba(12, 20, 16, 0.45), 0 4px 6px -2px rgba(12, 20, 16, 0.3);
+  --shadow-lg: 0 16px 28px -4px rgba(12, 20, 16, 0.55), 0 6px 10px -4px rgba(12, 20, 16, 0.4);
+  --shadow-card-hover: 0 24px 38px -6px rgba(12, 20, 16, 0.65), 0 0 20px rgba(74, 105, 88, 0.2);
+
+  /* Geometry & Layout */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  --container-max-width: 1200px;
+  --header-height: 72px;
+
+  /* Typography Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
