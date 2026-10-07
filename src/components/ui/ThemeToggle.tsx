@@ -68,6 +68,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       className={`theme-toggle-btn ${theme === "light" ? "is-light" : "is-dark"} ${className}`}
       onClick={toggleTheme}
+      suppressHydrationWarning
       aria-label={
         theme === "dark" ? "Enable light mode" : "Enable current mode"
       }
