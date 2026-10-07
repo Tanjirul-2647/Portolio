@@ -12,19 +12,45 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
 
   useEffect(() => {
     setMounted(true);
-    // Check current theme on document or saved in localStorage
+    // 1. Check saved manual preference in localStorage
     const saved = localStorage.getItem("theme");
-    const isLight =
-      saved === "light" ||
-      document.documentElement.getAttribute("data-theme") === "light";
-    if (isLight) {
-      setTheme("light");
+
+    // 2. Determine initial theme:
+    // If user explicitly chose 'light' or 'dark', use that.
+    // If no preference is saved, detect device preference (prefers-color-scheme).
+    let initialTheme: "dark" | "light" = "dark";
+    if (saved === "light" || saved === "dark") {
+      initialTheme = saved;
+    } else {
+      const prefersLight =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches;
+      initialTheme = prefersLight ? "light" : "dark";
+    }
+
+    setTheme(initialTheme);
+    if (initialTheme === "light") {
       document.documentElement.setAttribute("data-theme", "light");
     } else {
-      setTheme("dark");
       document.documentElement.removeAttribute("data-theme");
     }
 
+    // 3. Listen for OS / system color scheme changes in real time (when no manual override is saved)
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      const currentSaved = localStorage.getItem("theme");
+      if (!currentSaved) {
+        const systemTheme: "dark" | "light" = e.matches ? "light" : "dark";
+        setTheme(systemTheme);
+        if (systemTheme === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        } else {
+          document.documentElement.removeAttribute("data-theme");
+        }
+      }
+    };
+
+    // 4. Listen for theme change events across components
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent<{ theme: "dark" | "light" }>;
       if (customEvent.detail?.theme) {
@@ -33,8 +59,11 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     };
 
     window.addEventListener("theme-change", handleThemeChange);
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+
     return () => {
       window.removeEventListener("theme-change", handleThemeChange);
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
     };
   }, []);
 

@@ -2155,6 +2155,14 @@ ol {
   color: #d6ede0;
 }
 
+.experience2-tag:hover,
+.experience2-box:hover .experience2-tag:hover {
+  background: var(--regrowth-forest);
+  border-color: rgba(110, 165, 130, 0.8);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
 /* Favourite Stack Cards */
 .favourite-stack-box {
   background: var(--bg-card);
@@ -2986,8 +2994,47 @@ ol {
 
 /* ============================================================
    LIGHT MODE PALETTE & COMPONENT OVERRIDES
-   Triggered via data-theme="light" on <html>
+   Triggered via data-theme="light" on <html> OR system prefers-color-scheme: light
    ============================================================ */
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) {
+    --dark: #121815;
+    --dark-rgb: 18, 24, 21;
+    --paragraph: rgba(18, 24, 21, 0.78);
+    --paragraph-light: rgba(18, 24, 21, 0.52);
+    --light: #f8faf8;
+    --bg-canvas: #f8faf8;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f2;
+    --bg-subtle: #edf3ef;
+    --border-color: rgba(27, 41, 34, 0.12);
+    --border-focus: rgba(45, 90, 63, 0.5);
+    --status-green: #2d6a4f;
+
+    --regrowth-dark-pine: #f4f7f5;
+    --regrowth-charcoal: #121815;
+    --regrowth-forest: #2d5a3f;
+    --regrowth-sage: #526e5d;
+
+    --header-bg: rgba(248, 250, 248, 0.88);
+    --header-border: rgba(27, 41, 34, 0.08);
+  }
+
+  html:not([data-theme="dark"]) body {
+    background-color: var(--bg-canvas);
+    background-image:
+      radial-gradient(ellipse at 85% 5%, rgba(45, 90, 63, 0.08) 0%, transparent 55%),
+      radial-gradient(circle at 10% 40%, rgba(67, 81, 70, 0.05) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(235, 242, 237, 0.95) 0%, #f4f7f5 100%);
+    color: var(--paragraph);
+  }
+
+  html:not([data-theme="dark"]) .header-wrap {
+    background: rgba(248, 250, 248, 0.88);
+    border-bottom-color: rgba(27, 41, 34, 0.08);
+  }
+}
+
 html[data-theme="light"] {
   --dark: #121815;
   --dark-rgb: 18, 24, 21;
@@ -3035,18 +3082,45 @@ html[data-theme="light"] .hero-signature-pic {
   -webkit-filter: brightness(0);
 }
 
+html[data-theme="light"] .signature-wrap img.signature {
+  filter: brightness(0);
+  -webkit-filter: brightness(0);
+  opacity: 0.95;
+}
+
+html[data-theme="light"] .signature-wrap .signature-line {
+  background-color: rgba(27, 41, 34, 0.22);
+}
+
+html[data-theme="light"] .signature-wrap .signature-label {
+  color: var(--paragraph);
+  font-weight: 600;
+}
+
 html[data-theme="light"] .hero-image-card {
   background: #ffffff;
   border-color: rgba(27, 41, 34, 0.12);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.08), 0 0 30px rgba(45, 90, 63, 0.05);
 }
 
+html[data-theme="light"] .partner-sec {
+  background: rgba(244, 247, 245, 0.9);
+  border-top: 1px solid rgba(27, 41, 34, 0.1);
+  border-bottom: 1px solid rgba(27, 41, 34, 0.1);
+}
+
+html[data-theme="light"] .partner-box {
+  opacity: 1;
+}
+
 html[data-theme="light"] .partner-box img {
-  filter: brightness(0) opacity(0.65);
+  filter: brightness(0);
+  opacity: 1;
 }
 
 html[data-theme="light"] .partner-box:hover img {
-  filter: brightness(0) opacity(0.95);
+  filter: brightness(0);
+  opacity: 1;
 }
 
 html[data-theme="light"] .featured-card .img-box {
@@ -3089,10 +3163,64 @@ html[data-theme="light"] .testimonial-box:hover {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
 }
 
+/* Category header in experience cards */
+html[data-theme="light"] .experience2-box-header {
+  color: var(--regrowth-forest);
+}
+
+/* Period / Year Pill Badge (Fixes low-contrast blue mark issue) */
+html[data-theme="light"] .experience2-box-body h4 span {
+  color: #1b4332;
+  background: rgba(45, 90, 63, 0.1);
+  border: 1px solid rgba(45, 90, 63, 0.28);
+  font-weight: 600;
+}
+
+html[data-theme="light"] .experience2-box:hover .experience2-box-body h4 span {
+  color: #121815;
+  background: rgba(45, 90, 63, 0.16);
+  border-color: rgba(45, 90, 63, 0.42);
+}
+
+/* Tags in Experience Cards (Fixes washed-out hover effect issue in red mark) */
 html[data-theme="light"] .experience2-tag {
   background: rgba(45, 90, 63, 0.08);
-  border-color: rgba(45, 90, 63, 0.2);
+  border: 1px solid rgba(45, 90, 63, 0.22);
   color: #121815;
+  font-weight: 500;
+}
+
+html[data-theme="light"] .experience2-box:hover .experience2-tag {
+  background: rgba(45, 90, 63, 0.12);
+  border-color: rgba(45, 90, 63, 0.35);
+  color: #121815;
+}
+
+html[data-theme="light"] .experience2-tag:hover,
+html[data-theme="light"] .experience2-box:hover .experience2-tag:hover {
+  background: var(--regrowth-forest);
+  border-color: var(--regrowth-forest);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(45, 90, 63, 0.22);
+  transform: translateY(-1px);
+}
+
+/* Favourite Stack Category & Proficiency Pill Badge */
+html[data-theme="light"] .favourite-stack-content > h4 {
+  color: var(--regrowth-forest);
+}
+
+html[data-theme="light"] .favourite-stack-body h4 span {
+  color: #1b4332;
+  background: rgba(45, 90, 63, 0.1);
+  border: 1px solid rgba(45, 90, 63, 0.28);
+  font-weight: 700;
+}
+
+html[data-theme="light"] .favourite-stack-box:hover .favourite-stack-body h4 span {
+  color: #121815;
+  background: rgba(45, 90, 63, 0.16);
+  border-color: rgba(45, 90, 63, 0.42);
 }
 
 html[data-theme="light"] .favourite-stack-icon {
