@@ -1400,6 +1400,7 @@ ol {
   border-radius: 0;
   border: none;
   box-shadow: none;
+  overflow: hidden;
 }
 
 .full-image-overlay {
@@ -1413,6 +1414,11 @@ ol {
     transparent 88%,
     rgba(22, 34, 28, 0.35) 100%
   );
+  z-index: 2;
+}
+
+.full-image-mobile-parallax {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -1424,7 +1430,25 @@ ol {
 
   .full-image-box {
     height: clamp(380px, 60vh, 520px);
-    background-attachment: scroll;
+    background-image: none !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .full-image-mobile-parallax {
+    display: block;
+    position: absolute;
+    top: -25%;
+    left: 0;
+    width: 100%;
+    height: 150%;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    will-change: transform;
+    pointer-events: none;
+    z-index: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
