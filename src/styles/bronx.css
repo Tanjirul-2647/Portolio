@@ -1438,17 +1438,18 @@ ol {
   .full-image-mobile-parallax {
     display: block;
     position: absolute;
-    top: -25%;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 150%;
+    min-height: 100%;
+    height: 100vh;
+    height: 100dvh;
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     will-change: transform;
     pointer-events: none;
     z-index: 1;
-    transform: translate3d(0, 0, 0);
   }
 }
 

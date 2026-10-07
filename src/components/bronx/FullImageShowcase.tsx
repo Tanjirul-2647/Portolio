@@ -27,14 +27,9 @@ export function FullImageShowcase({
     const rect = containerRef.current.getBoundingClientRect();
     const winHeight = window.innerHeight;
 
-    // Only calculate when visible or within proximity to the viewport
-    if (rect.bottom > -60 && rect.top < winHeight + 60) {
-      const progress = (winHeight - rect.top) / (winHeight + rect.height);
-      const clamped = Math.max(0, Math.min(1, progress));
-      // Max travel range inside 150% height layer
-      const maxTravel = rect.height * 0.35;
-      const translateY = (clamped - 0.5) * maxTravel;
-      parallaxRef.current.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`;
+    // Pin the image stationary in the viewport while container scrolls
+    if (rect.bottom > 0 && rect.top < winHeight) {
+      parallaxRef.current.style.transform = `translate3d(0, ${-rect.top}px, 0)`;
     }
   };
 
@@ -47,11 +42,14 @@ export function FullImageShowcase({
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll, { passive: true });
+    
     updateParallax();
+    const frame = requestAnimationFrame(updateParallax);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      cancelAnimationFrame(frame);
     };
   }, []);
 
