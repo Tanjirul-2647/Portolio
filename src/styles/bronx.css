@@ -427,14 +427,121 @@ ol {
   justify-content: space-between;
   max-width: 1440px;
   margin: 0 auto;
+  position: relative;
 }
 
-.header-row.header-nav-center {
+.header-side-spacer {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON (ELECTRIC SUN BURST / MOON)
+   ============================================================ */
+.theme-toggle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  border: 1.5px solid rgba(56, 189, 248, 0.55);
+  background: rgba(14, 165, 233, 0.12);
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35), inset 0 0 8px rgba(56, 189, 248, 0.15);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1) rotate(20deg);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.65), inset 0 0 12px rgba(56, 189, 248, 0.3);
+  border-color: #38bdf8;
+  color: #7dd3fc;
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+.theme-toggle-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+
+.theme-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Current Dark Mode State (is-dark): Glowing Electric Blue Sun Burst */
+.theme-toggle-btn.is-dark .icon-sun-burst {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  filter: drop-shadow(0 0 4px #38bdf8);
+}
+
+.theme-toggle-btn.is-dark .icon-moon-crescent {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4) rotate(-90deg);
+  pointer-events: none;
+}
+
+/* Light Mode State (is-light): Botanical Charcoal Crescent Moon */
+.theme-toggle-btn.is-light {
+  border-color: rgba(27, 41, 34, 0.2);
+  background: rgba(27, 41, 34, 0.06);
+  color: #121815;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.theme-toggle-btn.is-light:hover {
+  transform: scale(1.1) rotate(-15deg);
+  background: rgba(27, 41, 34, 0.12);
+  border-color: rgba(27, 41, 34, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  color: #121815;
+}
+
+.theme-toggle-btn.is-light .icon-sun-burst {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4) rotate(90deg);
+  pointer-events: none;
+}
+
+.theme-toggle-btn.is-light .icon-moon-crescent {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
 }
 
 .header-nav-bar {
-  width: 100%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2872,4 +2979,198 @@ ol {
   .service-modal-content {
     padding: 30px 24px;
   }
+}
+
+/* ============================================================
+   LIGHT MODE PALETTE & COMPONENT OVERRIDES
+   Triggered via data-theme="light" on <html>
+   ============================================================ */
+html[data-theme="light"] {
+  --dark: #121815;
+  --dark-rgb: 18, 24, 21;
+  --paragraph: rgba(18, 24, 21, 0.78);
+  --paragraph-light: rgba(18, 24, 21, 0.52);
+  --light: #f8faf8;
+  --bg-canvas: #f8faf8;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f2;
+  --bg-subtle: #edf3ef;
+  --border-color: rgba(27, 41, 34, 0.12);
+  --border-focus: rgba(45, 90, 63, 0.5);
+  --status-green: #2d6a4f;
+
+  --regrowth-dark-pine: #f4f7f5;
+  --regrowth-charcoal: #121815;
+  --regrowth-forest: #2d5a3f;
+  --regrowth-sage: #526e5d;
+
+  --header-bg: rgba(248, 250, 248, 0.88);
+  --header-border: rgba(27, 41, 34, 0.08);
+}
+
+html[data-theme="light"] body {
+  background-color: var(--bg-canvas);
+  background-image:
+    radial-gradient(ellipse at 85% 5%, rgba(45, 90, 63, 0.08) 0%, transparent 55%),
+    radial-gradient(circle at 10% 40%, rgba(67, 81, 70, 0.05) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, rgba(235, 242, 237, 0.95) 0%, #f4f7f5 100%);
+  color: var(--paragraph);
+}
+
+html[data-theme="light"] .header-wrap {
+  background: rgba(248, 250, 248, 0.88);
+  border-bottom-color: rgba(27, 41, 34, 0.08);
+}
+
+html[data-theme="light"] .header-nav-link:hover {
+  background: rgba(27, 41, 34, 0.06);
+  color: #121815;
+}
+
+html[data-theme="light"] .hero-signature-pic {
+  filter: brightness(0);
+  -webkit-filter: brightness(0);
+}
+
+html[data-theme="light"] .hero-image-card {
+  background: #ffffff;
+  border-color: rgba(27, 41, 34, 0.12);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.08), 0 0 30px rgba(45, 90, 63, 0.05);
+}
+
+html[data-theme="light"] .partner-box img {
+  filter: brightness(0) opacity(0.65);
+}
+
+html[data-theme="light"] .partner-box:hover img {
+  filter: brightness(0) opacity(0.95);
+}
+
+html[data-theme="light"] .featured-card .img-box {
+  background: var(--bg-subtle);
+  border-color: rgba(27, 41, 34, 0.1);
+}
+
+html[data-theme="light"] .featured-card:hover .img-box {
+  border-color: var(--regrowth-forest);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08), 0 0 20px rgba(45, 90, 63, 0.08);
+}
+
+html[data-theme="light"] .featured-card:hover .content .title {
+  color: var(--regrowth-forest);
+}
+
+html[data-theme="light"] .featured-card .content .date {
+  border-color: rgba(45, 90, 63, 0.25);
+  background: rgba(45, 90, 63, 0.08);
+  color: var(--dark);
+}
+
+html[data-theme="light"] .experience-box,
+html[data-theme="light"] .experience2-box,
+html[data-theme="light"] .favourite-stack-box,
+html[data-theme="light"] .testimonial-box,
+html[data-theme="light"] .faq-item,
+html[data-theme="light"] .cta-form-card {
+  background: #ffffff;
+  border-color: rgba(27, 41, 34, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+html[data-theme="light"] .experience-box:hover,
+html[data-theme="light"] .experience2-box:hover,
+html[data-theme="light"] .favourite-stack-box:hover,
+html[data-theme="light"] .testimonial-box:hover {
+  background: #f7faf8;
+  border-color: var(--regrowth-forest);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
+}
+
+html[data-theme="light"] .experience2-tag {
+  background: rgba(45, 90, 63, 0.08);
+  border-color: rgba(45, 90, 63, 0.2);
+  color: #121815;
+}
+
+html[data-theme="light"] .favourite-stack-icon {
+  background: rgba(45, 90, 63, 0.08);
+  border-color: rgba(45, 90, 63, 0.2);
+}
+
+html[data-theme="light"] .faq-item.open {
+  border-color: var(--regrowth-forest);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme="light"] .cta-input,
+html[data-theme="light"] .cta-textarea {
+  background: #f8faf8;
+  border-color: rgba(27, 41, 34, 0.15);
+  color: #121815;
+}
+
+html[data-theme="light"] .cta-input:focus,
+html[data-theme="light"] .cta-textarea:focus {
+  background: #ffffff;
+  border-color: var(--regrowth-forest);
+  box-shadow: 0 0 0 2px rgba(45, 90, 63, 0.2);
+}
+
+html[data-theme="light"] .popup-menu-wrap {
+  background: #f8faf8;
+}
+
+html[data-theme="light"] .popup-menu-close-btn {
+  background: rgba(27, 41, 34, 0.06);
+  border-color: rgba(27, 41, 34, 0.15);
+  color: #121815;
+}
+
+html[data-theme="light"] .popup-menu-close-btn:hover {
+  background: rgba(27, 41, 34, 0.12);
+  color: #121815;
+}
+
+html[data-theme="light"] .hamburger-line {
+  background: #121815;
+}
+
+html[data-theme="light"] .mobile-hamburger-btn {
+  background: rgba(27, 41, 34, 0.06);
+  border-color: rgba(27, 41, 34, 0.15);
+}
+
+html[data-theme="light"] .mobile-hamburger-btn:hover {
+  background: rgba(27, 41, 34, 0.12);
+}
+
+html[data-theme="light"] .mobile-hamburger-btn:hover .hamburger-line {
+  background: #000000;
+}
+
+html[data-theme="light"] .service-modal-card {
+  background: #ffffff;
+  border-color: rgba(27, 41, 34, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+}
+
+html[data-theme="light"] .service-modal-close {
+  background: #f0f4f1;
+  border-color: rgba(27, 41, 34, 0.15);
+  color: #121815;
+}
+
+html[data-theme="light"] .service-modal-img {
+  background: #f4f7f5;
+  border-left-color: rgba(27, 41, 34, 0.1);
+}
+
+html[data-theme="light"] .full-image-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 248, 0.3) 0%,
+    transparent 12%,
+    transparent 88%,
+    rgba(248, 250, 248, 0.35) 100%
+  );
 }

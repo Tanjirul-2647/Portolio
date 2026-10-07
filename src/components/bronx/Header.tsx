@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface HeaderProps {
   onOpenMenu?: () => void;
@@ -11,7 +12,10 @@ export function Header({ onNavigate, onOpenMenu }: HeaderProps) {
   return (
     <header className="header-wrap">
       {/* Desktop Navigation */}
-      <div className="header-row header-nav-center header-desktop-only">
+      <div className="header-row header-desktop-only">
+        {/* Left balance spacer so center nav links stay mathematically centered */}
+        <div className="header-side-spacer" aria-hidden="true" />
+
         <nav className="header-nav-bar" aria-label="Main Navigation">
           <ul className="header-nav-list">
             <li className="header-nav-item">
@@ -97,6 +101,11 @@ export function Header({ onNavigate, onOpenMenu }: HeaderProps) {
             </li>
           </ul>
         </nav>
+
+        {/* Right header action: Theme toggle button (light / current) */}
+        <div className="header-actions">
+          <ThemeToggle />
+        </div>
       </div>
 
       {/* Mobile Navigation Header */}
@@ -113,17 +122,20 @@ export function Header({ onNavigate, onOpenMenu }: HeaderProps) {
           <span className="mobile-brand-name">TANJIRUL ISLAM</span>
         </a>
 
-        {/* Right Hamburger Menu Button */}
-        <button
-          type="button"
-          className="mobile-hamburger-btn mobile-hamburger-right"
-          onClick={onOpenMenu}
-          aria-label="Open navigation menu"
-        >
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-        </button>
+        {/* Right Mobile Actions: Theme Toggle + Hamburger Menu */}
+        <div className="mobile-header-actions">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="mobile-hamburger-btn mobile-hamburger-right"
+            onClick={onOpenMenu}
+            aria-label="Open navigation menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+        </div>
       </div>
     </header>
   );
