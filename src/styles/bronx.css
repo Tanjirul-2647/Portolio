@@ -3223,6 +3223,10 @@ html[data-theme="light"] .testimonial-box:hover {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
 }
 
+html[data-theme="light"] .testimonial-logo img {
+  filter: brightness(0) opacity(0.7);
+}
+
 /* Category header in experience cards */
 html[data-theme="light"] .experience2-box-header {
   color: var(--regrowth-forest);

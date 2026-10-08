@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface PopupMenuProps {
@@ -10,25 +10,6 @@ interface PopupMenuProps {
 }
 
 export function PopupMenu({ isOpen, onClose, onNavigate }: PopupMenuProps) {
-  const [coordinates, setCoordinates] = useState("23.4607° N, 91.1809° E");
-
-  useEffect(() => {
-    // Try to get user local coordinates or default to Cumilla
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude.toFixed(4);
-          const lon = Math.abs(pos.coords.longitude).toFixed(4);
-          const latDir = pos.coords.latitude >= 0 ? "N" : "S";
-          const lonDir = pos.coords.longitude >= 0 ? "E" : "W";
-          setCoordinates(`${lat}° ${latDir}, ${lon}° ${lonDir}`);
-        },
-        () => {
-          setCoordinates("23.4607° N, 91.1809° E");
-        }
-      );
-    }
-  }, []);
 
   // Prevent body scroll when menu is active
   useEffect(() => {
@@ -77,12 +58,7 @@ export function PopupMenu({ isOpen, onClose, onNavigate }: PopupMenuProps) {
       <div className="popup-menu-inner-sidebar">
         {/* Header */}
         <div className="popup-menu-header">
-          <div className="header-local-time">
-            <span style={{ color: "var(--paragraph-light)", fontSize: 13, textTransform: "uppercase", letterSpacing: 0.5 }}>Local /</span>
-            <span className="time-value" style={{ marginLeft: 6, fontSize: 13, color: "var(--dark)", fontWeight: 600 }}>{coordinates}</span>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginLeft: "auto" }}>
             <ThemeToggle />
             <button
               className="popup-menu-close-btn"

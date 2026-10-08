@@ -11,49 +11,49 @@ interface Testimonial {
 
 const testimonialsRail1: Testimonial[] = [
   {
-    author: "Rick O'connell",
-    role: "Gameplay Programmer, Microsoft",
-    avatar: "/images/bronx/testimonial-1.png",
-    logo: "/images/bronx/partner-7-1.svg",
-    quote: "I was amazed by how intuitive and user-friendly everything felt. It's clear their designers obsess over every pixel, every transition, to create experiences that delight.",
+    author: "Tanvir Ahmed",
+    role: "Founder & CEO, NexaSprint Labs",
+    avatar: "/images/testimonials/tanvir-ahmed.jpg",
+    logo: "/images/testimonials/logo-nexasprint.svg",
+    quote: "Tanjirul revamped our entire SaaS product dashboard into an ultra-fast, intuitive web experience. Our client onboarding completion surged by 45% within three weeks. His command of Next.js architecture and brutalist aesthetic is simply world-class.",
   },
   {
-    author: "EDDIE BROCK",
-    role: "Design Manager, HBO",
-    avatar: "/images/bronx/testimonial-2.png",
-    logo: "/images/bronx/partner-5-1.svg",
-    quote: "I HIRED TANJIRUL TO REDESIGN MY COMPANY'S WEBSITE. THE PROCESS WAS SMOOTH AND EASY. THEY LISTENED TO ALL MY NEEDS AND DELIVERED A SITE THAT EXCEEDED MY EXPECTATIONS.",
+    author: "Priya Sharma",
+    role: "Head of Product, Veloce Commerce",
+    avatar: "/images/testimonials/priya-sharma.jpg",
+    logo: "/images/testimonials/logo-veloce.svg",
+    quote: "We brought Tanjirul in to overhaul our D2C e-commerce frontend. He delivered pixel-perfect responsive layouts with micro-interactions that feel like a high-end native iOS app. Mobile checkout conversion jumped by 38% post-launch.",
   },
   {
-    author: "ANNE WEYING",
-    role: "Cloud Sales Executive, AMD",
-    avatar: "/images/bronx/testimonial-3.png",
-    logo: "/images/bronx/partner-6-1.svg",
-    quote: "WITH TANJIRUL'S USER-FRIENDLY DIGITAL PLATFORMS, OUR TEAM CAN NOW WORK SMARTER, NOT HARDER. INTERACTIVE REPORTS, METRICS, FORECASTING - ALL AUTOMATED IN ONE PLACE.",
+    author: "Farhan Kabir",
+    role: "Creative Director, Bengal Studio",
+    avatar: "/images/testimonials/farhan-kabir.jpg",
+    logo: "/images/testimonials/logo-bengal.svg",
+    quote: "Working with Tanjirul was effortless. He bridged the gap between our bold brand vision and production-grade frontend engineering seamlessly. Every hover state, typographic hierarchy, and motion transition was executed with obsessive precision.",
   },
 ];
 
 const testimonialsRail2: Testimonial[] = [
   {
-    author: "Rick O'connell",
-    role: "Gameplay Programmer, Microsoft",
-    avatar: "/images/bronx/testimonial-4.png",
-    logo: "/images/bronx/partner-7-1.svg",
-    quote: "Working with Tanjirul redefined what we expected from a freelance partner. Fast communication, impeccable code quality, and truly world-class aesthetics.",
+    author: "Rohan Mukherjee",
+    role: "Co-Founder & CTO, DevSynapse",
+    avatar: "/images/testimonials/rohan-mukherjee.jpg",
+    logo: "/images/testimonials/logo-devsynapse.svg",
+    quote: "Finding a designer who understands state management, server components, and performance optimization this deeply is rare. Tanjirul delivered clean, maintainable code that our engineering team integrated seamlessly without any tech debt.",
   },
   {
-    author: "EDDIE BROCK",
-    role: "Design Manager, HBO",
-    avatar: "/images/bronx/testimonial-5.png",
-    logo: "/images/bronx/partner-5-1.svg",
-    quote: "The brutalist typography and dynamic microinteractions converted 40% higher on our primary landing page within the first 30 days of launch.",
+    author: "Nusrat Jahan",
+    role: "Managing Director, CraftRoots",
+    avatar: "/images/testimonials/nusrat-jahan.jpg",
+    logo: "/images/testimonials/logo-craftroots.svg",
+    quote: "From initial wireframes to production deployment, Tanjirul blew past our benchmarks. The website loads in milliseconds, and the bold design gave our lifestyle brand an immediate international edge that our clients constantly compliment.",
   },
   {
-    author: "ANNE WEYING",
-    role: "Cloud Sales Executive, AMD",
-    avatar: "/images/bronx/testimonial-6.png",
-    logo: "/images/bronx/partner-6-1.svg",
-    quote: "From Figma sketches to a lightning-fast Next.js production site in record time. We could not have asked for a smoother collaboration.",
+    author: "Aditya Mehta",
+    role: "Principal & Founder, ApexGrowth",
+    avatar: "/images/testimonials/aditya-mehta.jpg",
+    logo: "/images/testimonials/logo-apexgrowth.svg",
+    quote: "Tanjirul is our go-to partner for premium client web builds. His rapid turnaround, proactive communication, and ability to convert complex creative briefs into high-converting interfaces make him an invaluable asset for any growing brand.",
   },
 ];
 
@@ -66,7 +66,7 @@ export function TestimonialsSection() {
       <div className="section-header3">
         <h3 className="title">
           <span>TRUSTED BY</span>
-          <span>INTERNATIONAL BRANDS</span>
+          <span>FOUNDERS & AGENCIES</span>
         </h3>
       </div>
 

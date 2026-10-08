@@ -8,7 +8,7 @@ const awards = [
     description: "Won Best UI, Best Innovation, and Special Kudos for its unique classic Macintosh typographic nostalgia re-engineered with modern web technologies.",
   },
   {
-    institution: "AWWWARDS",
+    institution: "AWARDS",
     title: "ARNO RED THEMED PORTFOLIO",
     year: "2023",
     description: "Honorable Mention & Site of the Day nominee; celebrated for futuristic horizontal scroll physics and minimal brutalist grid layouts.",
