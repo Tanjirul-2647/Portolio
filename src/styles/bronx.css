@@ -1993,7 +1993,8 @@ ol {
   max-width: 220px;
   height: 75px;
   width: auto;
-  filter: brightness(0) invert(0.9);
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
 }
 
 .signature-wrap .signature-line {
@@ -2993,46 +2994,101 @@ ol {
 }
 
 /* ============================================================
-   LIGHT MODE PALETTE & COMPONENT OVERRIDES
-   Triggered via data-theme="light" on <html> OR system prefers-color-scheme: light
+   LIGHT & DARK MODE PALETTES & THEME OVERRIDES
+   Explicitly activated via data-theme="dark" or data-theme="light" on <html>
    ============================================================ */
-@media (prefers-color-scheme: light) {
-  html:not([data-theme="dark"]) {
-    --dark: #121815;
-    --dark-rgb: 18, 24, 21;
-    --paragraph: rgba(18, 24, 21, 0.78);
-    --paragraph-light: rgba(18, 24, 21, 0.52);
-    --light: #f8faf8;
-    --bg-canvas: #f8faf8;
-    --bg-card: #ffffff;
-    --bg-card-hover: #f1f5f2;
-    --bg-subtle: #edf3ef;
-    --border-color: rgba(27, 41, 34, 0.12);
-    --border-focus: rgba(45, 90, 63, 0.5);
-    --status-green: #2d6a4f;
+html[data-theme="dark"],
+:root {
+  --dark: #f2f6f3;
+  --dark-rgb: 242, 246, 243;
+  --paragraph: rgba(242, 246, 243, 0.78);
+  --paragraph-light: rgba(242, 246, 243, 0.55);
+  --light: #1b2922;
+  --bg-canvas: #1b2922;
+  --bg-card: #203128;
+  --bg-card-hover: #263b30;
+  --bg-subtle: #16221c;
+  --border-color: rgba(74, 105, 88, 0.28);
+  --border-focus: rgba(74, 105, 88, 0.55);
+  --status-green: #52b788;
 
-    --regrowth-dark-pine: #f4f7f5;
-    --regrowth-charcoal: #121815;
-    --regrowth-forest: #2d5a3f;
-    --regrowth-sage: #526e5d;
+  --regrowth-dark-pine: #1b2922;
+  --regrowth-charcoal: #1c1c1c;
+  --regrowth-forest: #4a6958;
+  --regrowth-sage: #435146;
 
-    --header-bg: rgba(248, 250, 248, 0.88);
-    --header-border: rgba(27, 41, 34, 0.08);
-  }
+  --header-bg: rgba(27, 41, 34, 0.84);
+  --header-border: rgba(74, 105, 88, 0.22);
 
-  html:not([data-theme="dark"]) body {
-    background-color: var(--bg-canvas);
-    background-image:
-      radial-gradient(ellipse at 85% 5%, rgba(45, 90, 63, 0.08) 0%, transparent 55%),
-      radial-gradient(circle at 10% 40%, rgba(67, 81, 70, 0.05) 0%, transparent 45%),
-      radial-gradient(ellipse at 50% 90%, rgba(235, 242, 237, 0.95) 0%, #f4f7f5 100%);
-    color: var(--paragraph);
-  }
+  --text-primary: #f2f6f3;
+  --text-secondary: #cad7ce;
+  --text-muted: #8e9f94;
+}
 
-  html:not([data-theme="dark"]) .header-wrap {
-    background: rgba(248, 250, 248, 0.88);
-    border-bottom-color: rgba(27, 41, 34, 0.08);
-  }
+html[data-theme="dark"] body {
+  background-color: var(--bg-canvas);
+  background-image:
+    radial-gradient(ellipse at 85% 5%, rgba(74, 105, 88, 0.25) 0%, transparent 55%),
+    radial-gradient(circle at 10% 40%, rgba(67, 81, 70, 0.2) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, rgba(27, 41, 34, 0.9) 0%, #16221c 100%);
+  background-attachment: fixed;
+  color: var(--paragraph);
+}
+
+html[data-theme="dark"] .header-wrap {
+  background: rgba(27, 41, 34, 0.84);
+  border-bottom-color: rgba(74, 105, 88, 0.22);
+}
+
+html[data-theme="dark"] .hero-signature-pic {
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+}
+
+html[data-theme="dark"] .signature-wrap img.signature {
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+  opacity: 1;
+}
+
+html[data-theme="dark"] .hero-image-card {
+  background: #141f1a;
+  border-color: rgba(74, 105, 88, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 40px rgba(74, 105, 88, 0.15);
+}
+
+html[data-theme="dark"] .partner-sec {
+  background: #16221c;
+  border-top: 1px solid rgba(74, 105, 88, 0.22);
+  border-bottom: 1px solid rgba(74, 105, 88, 0.22);
+}
+
+html[data-theme="dark"] .partner-box img {
+  filter: brightness(0) invert(0.9) opacity(0.7);
+  opacity: 0.7;
+}
+
+html[data-theme="dark"] .partner-box:hover img {
+  filter: brightness(0) invert(1) opacity(1);
+  opacity: 1;
+}
+
+html[data-theme="dark"] .experience-box,
+html[data-theme="dark"] .experience2-box,
+html[data-theme="dark"] .favourite-stack-box,
+html[data-theme="dark"] .testimonial-box,
+html[data-theme="dark"] .faq-item,
+html[data-theme="dark"] .cta-form-card {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .cta-input,
+html[data-theme="dark"] .cta-textarea {
+  background: var(--bg-subtle, #16221c);
+  border-color: var(--border-color);
+  color: var(--dark);
 }
 
 html[data-theme="light"] {
@@ -3056,6 +3112,10 @@ html[data-theme="light"] {
 
   --header-bg: rgba(248, 250, 248, 0.88);
   --header-border: rgba(27, 41, 34, 0.08);
+
+  --text-primary: #121815;
+  --text-secondary: rgba(18, 24, 21, 0.78);
+  --text-muted: rgba(18, 24, 21, 0.52);
 }
 
 html[data-theme="light"] body {

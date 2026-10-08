@@ -12,45 +12,21 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
 
   useEffect(() => {
     setMounted(true);
-    // 1. Check saved manual preference in localStorage
+    // 1. Read current active theme on html attribute or saved in localStorage
     const saved = localStorage.getItem("theme");
+    const active = document.documentElement.getAttribute("data-theme");
 
-    // 2. Determine initial theme:
-    // If user explicitly chose 'light' or 'dark', use that.
-    // If no preference is saved, detect device preference (prefers-color-scheme).
-    let initialTheme: "dark" | "light" = "dark";
+    let currentTheme: "dark" | "light" = "dark";
     if (saved === "light" || saved === "dark") {
-      initialTheme = saved;
-    } else {
-      const prefersLight =
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: light)").matches;
-      initialTheme = prefersLight ? "light" : "dark";
+      currentTheme = saved;
+    } else if (active === "light" || active === "dark") {
+      currentTheme = active;
     }
 
-    setTheme(initialTheme);
-    if (initialTheme === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
+    setTheme(currentTheme);
+    document.documentElement.setAttribute("data-theme", currentTheme);
 
-    // 3. Listen for OS / system color scheme changes in real time (when no manual override is saved)
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      const currentSaved = localStorage.getItem("theme");
-      if (!currentSaved) {
-        const systemTheme: "dark" | "light" = e.matches ? "light" : "dark";
-        setTheme(systemTheme);
-        if (systemTheme === "light") {
-          document.documentElement.setAttribute("data-theme", "light");
-        } else {
-          document.documentElement.removeAttribute("data-theme");
-        }
-      }
-    };
-
-    // 4. Listen for theme change events across components
+    // 2. Listen for theme change events across components
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent<{ theme: "dark" | "light" }>;
       if (customEvent.detail?.theme) {
@@ -59,11 +35,9 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     };
 
     window.addEventListener("theme-change", handleThemeChange);
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
 
     return () => {
       window.removeEventListener("theme-change", handleThemeChange);
-      mediaQuery.removeEventListener("change", handleSystemThemeChange);
     };
   }, []);
 
@@ -71,20 +45,11 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     const nextTheme = theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
 
-    if (nextTheme === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-      try {
-        localStorage.setItem("theme", "light");
-      } catch (e) {
-        /* ignore */
-      }
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-      try {
-        localStorage.setItem("theme", "dark");
-      } catch (e) {
-        /* ignore */
-      }
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    try {
+      localStorage.setItem("theme", nextTheme);
+    } catch (e) {
+      /* ignore */
     }
 
     window.dispatchEvent(
@@ -99,14 +64,14 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
       onClick={toggleTheme}
       suppressHydrationWarning
       aria-label={
-        theme === "dark" ? "Enable light mode" : "Enable current mode"
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
       }
       title={
-        theme === "dark" ? "Enable light mode" : "Enable current mode"
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
       }
     >
       <span className="theme-toggle-icon-wrap" aria-hidden="true">
-        {/* Sun / Burst Icon for current dark mode (clicking enables light mode) */}
+        {/* Sun / Burst Icon shown in dark mode (clicking enables light mode) */}
         <svg
           className="theme-icon icon-sun-burst"
           width="20"
@@ -129,7 +94,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
           <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
         </svg>
 
-        {/* Crescent Moon Icon for light mode (clicking enables current mode) */}
+        {/* Crescent Moon Icon shown in light mode (clicking enables dark mode) */}
         <svg
           className="theme-icon icon-moon-crescent"
           width="19"
