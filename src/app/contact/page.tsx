@@ -15,6 +15,8 @@ export default function ContactPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [sendError, setSendError] = useState("");
   const [emailCopied, setEmailCopied] = useState(false);
 
   const validate = () => {
@@ -27,17 +29,42 @@ export default function ContactPage() {
     }
     if (!formData.message.trim()) {
       errs.message = "Message cannot be empty";
-    } else if (formData.message.trim().length < 15) {
-      errs.message = "Please provide at least 15 characters of detail";
+    } else if (formData.message.trim().length < 10) {
+      errs.message = "Please provide at least 10 characters of detail";
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      setSubmitted(true);
+    if (!validate()) return;
+
+    setLoading(true);
+    setSendError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: `[Opportunity: ${formData.opportunityType}]\n\n${formData.message}`,
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (data?.success) {
+        setSubmitted(true);
+      } else {
+        setSendError(data?.message || "Failed to send. Please reach out directly via email.");
+      }
+    } catch {
+      setSendError("Network error. Please reach out directly via email.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -179,8 +206,14 @@ export default function ContactPage() {
                     {errors.message && <span className={styles.errorText}>{errors.message}</span>}
                   </div>
 
-                  <Button type="submit" variant="primary" size="lg" fullWidth>
-                    Transmit Message →
+                  {sendError && (
+                    <div style={{ color: "#ef4444", fontSize: 13, background: "rgba(239, 68, 68, 0.1)", padding: "10px 14px", borderRadius: 8 }}>
+                      ⚠️ {sendError}
+                    </div>
+                  )}
+
+                  <Button type="submit" variant="primary" size="lg" fullWidth disabled={loading}>
+                    {loading ? "Transmitting Message..." : "Transmit Message →"}
                   </Button>
                 </div>
               </form>

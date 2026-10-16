@@ -8,60 +8,57 @@ interface CtaSectionProps {
 }
 
 export function CtaSection({ onNavigate }: CtaSectionProps) {
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "activation_needed" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [lastSent, setLastSent] = useState({ name: "", email: "", message: "" });
 
   const targetEmail = "tanjirul.islam.256@gmail.com";
+
+  const currentName = formState.name || lastSent.name;
+  const currentEmail = formState.email || lastSent.email;
+  const currentMessage = formState.message || lastSent.message;
+
+  const subject = `Portfolio Inquiry from ${currentName.trim() || "Visitor"}`;
+  const bodyText = `Hi Tanjirul,\n\nName: ${currentName}\nEmail: ${currentEmail}\n\nProject Details:\n${currentMessage}`;
+
+  const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+  const mailtoUrl = `mailto:${targetEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
+      setErrorMessage("Please complete all fields before sending.");
+      setStatus("error");
       return;
     }
 
-    setLoading(true);
-
-    const subject = `Portfolio Inquiry from ${formState.name}`;
-    const bodyText = `Name: ${formState.name}\nEmail: ${formState.email}\n\nProject Details:\n${formState.message}`;
+    setStatus("loading");
+    setErrorMessage("");
+    const snapshot = { ...formState };
+    setLastSent(snapshot);
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
-        body: JSON.stringify({
-          name: formState.name,
-          email: formState.email,
-          message: formState.message,
-          _subject: subject,
-          _replyto: formState.email,
-          _captcha: "false",
-          _template: "table",
-        }),
+        body: JSON.stringify(snapshot),
       });
 
-      if (response.ok) {
-        setSubmitted(true);
+      const data = await response.json().catch(() => null);
+
+      if (response.ok && (data?.success === true || data?.success === "true")) {
+        setStatus("success");
+        setFormState({ name: "", email: "", message: "" });
       } else {
-        // Fallback: open Gmail compose directly
-        window.open(
-          `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`,
-          "_blank"
-        );
-        setSubmitted(true);
+        setErrorMessage(data?.message || "Something went wrong while sending your message. Please try again.");
+        setStatus("error");
       }
     } catch {
-      // Offline or network error fallback: open Gmail compose
-      window.open(
-        `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`,
-        "_blank"
-      );
-      setSubmitted(true);
-    } finally {
-      setLoading(false);
+      setErrorMessage("Network error. Please try again or reach out directly.");
+      setStatus("error");
     }
   };
 
@@ -108,28 +105,36 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
 
           {/* Quick Contact Form */}
           <div className="cta-form-card">
-            {submitted ? (
+            {status === "success" ? (
               <div className="cta-success-box">
                 <span style={{ fontSize: 36, color: "var(--status-green, #52b788)", display: "inline-block", marginBottom: 8 }}>✓</span>
-                <h4 style={{ fontSize: 24, margin: "6px 0 8px", color: "var(--dark)", fontWeight: 700 }}>Thank you, {formState.name}!</h4>
-                <p style={{ fontSize: 16, color: "var(--paragraph)", maxWidth: 440, margin: "0 auto 16px", lineHeight: 1.6 }}>
-                  Your message has been sent to <strong style={{ color: "var(--dark)" }}>{targetEmail}</strong>. I will respond to your email within 24 hours.
+                <h4 style={{ fontSize: 24, margin: "6px 0 8px", color: "var(--dark)", fontWeight: 700 }}>Thank you, {lastSent.name}!</h4>
+                <p style={{ fontSize: 16, color: "var(--paragraph)", maxWidth: 460, margin: "0 auto 16px", lineHeight: 1.6 }}>
+                  Your message has been directed to <strong style={{ color: "var(--dark)" }}>{targetEmail}</strong>. I will respond to your email within 24 hours.
                 </p>
                 <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 16 }}>
                   <a
-                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodeURIComponent(`Portfolio Inquiry from ${formState.name}`)}&body=${encodeURIComponent(`Name: ${formState.name}\nEmail: ${formState.email}\n\nProject Details:\n${formState.message}`)}`}
+                    href={gmailComposeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="theme-btn"
                     style={{ fontSize: 13, padding: "10px 20px" }}
                   >
-                    Open in Gmail Directly
+                    Open in Gmail ↗
+                  </a>
+                  <a
+                    href={mailtoUrl}
+                    className="theme-btn2"
+                    style={{ fontSize: 13, padding: "10px 20px" }}
+                  >
+                    Send via Mail App ↗
                   </a>
                   <button
                     type="button"
                     onClick={() => {
-                      setSubmitted(false);
+                      setStatus("idle");
                       setFormState({ name: "", email: "", message: "" });
+                      setErrorMessage("");
                     }}
                     style={{
                       background: "transparent",
@@ -150,6 +155,34 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="cta-form">
+                {status === "error" && errorMessage && (
+                  <div
+                    style={{
+                      background: "rgba(239, 68, 68, 0.12)",
+                      border: "1px solid rgba(239, 68, 68, 0.35)",
+                      borderRadius: 10,
+                      padding: "10px 14px",
+                      fontSize: 13,
+                      color: "#fca5a5",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 10,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span>⚠️ {errorMessage}</span>
+                    <a
+                      href={gmailComposeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#fff", textDecoration: "underline", fontWeight: 600, fontSize: 12 }}
+                    >
+                      Send via Gmail ↗
+                    </a>
+                  </div>
+                )}
+
                 <div className="cta-form-grid">
                   <input
                     type="text"
@@ -176,16 +209,17 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
                   onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                   className="cta-textarea"
                 />
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={status === "loading"}
                   className="theme-btn2 cta-submit-btn"
                   style={{
-                    opacity: loading ? 0.7 : 1,
-                    cursor: loading ? "not-allowed" : "pointer",
+                    opacity: status === "loading" ? 0.7 : 1,
+                    cursor: status === "loading" ? "not-allowed" : "pointer",
                   }}
                 >
-                  {loading ? "Sending..." : "Send Message"}
+                  {status === "loading" ? "Sending Message..." : "SEND MESSAGE"}
                 </button>
               </form>
             )}
@@ -214,7 +248,7 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
               </a>
             </li>
             <li>
-              <a href="https://wa.me/8801766580356?s=t" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.me/message/SLFQRAGU2NK6H1" target="_blank" rel="noopener noreferrer">
                 WhatsApp <span style={{ fontSize: 13, transform: "rotate(45deg)", display: "inline-block" }}>↑</span>
               </a>
             </li>

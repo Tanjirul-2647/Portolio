@@ -147,7 +147,7 @@ export function PopupMenu({ isOpen, onClose, onNavigate }: PopupMenuProps) {
               </a>
             </li>
             <li>
-              <a href="https://wa.me/8801766580356?s=t" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.me/message/SLFQRAGU2NK6H1" target="_blank" rel="noopener noreferrer">
                 WhatsApp <span style={{ fontSize: 12, transform: "rotate(45deg)", display: "inline-block" }}>↑</span>
               </a>
             </li>
