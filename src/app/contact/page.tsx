@@ -58,10 +58,65 @@ export default function ContactPage() {
 
       if (data?.success) {
         setSubmitted(true);
-      } else {
-        setSendError(data?.message || "Failed to send. Please reach out directly via email.");
+        return;
       }
+
+      // Client-side fallback if server route failed
+      try {
+        const clientRes = await fetch("https://formsubmit.co/ajax/tanjirul.islam.256@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: `[Opportunity: ${formData.opportunityType}]\n\n${formData.message}`,
+            _subject: `Portfolio Inquiry from ${formData.name}`,
+            _replyto: formData.email,
+            _captcha: "false",
+            _template: "table",
+          }),
+        });
+        const clientData = await clientRes.json().catch(() => null);
+        if (clientData?.success === true || clientData?.success === "true") {
+          setSubmitted(true);
+          return;
+        }
+      } catch {
+        // Fall through
+      }
+
+      setSendError(data?.message || "Failed to send. Please reach out directly via email.");
     } catch {
+      // Network error client-side fallback
+      try {
+        const clientRes = await fetch("https://formsubmit.co/ajax/tanjirul.islam.256@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: `[Opportunity: ${formData.opportunityType}]\n\n${formData.message}`,
+            _subject: `Portfolio Inquiry from ${formData.name}`,
+            _replyto: formData.email,
+            _captcha: "false",
+            _template: "table",
+          }),
+        });
+        const clientData = await clientRes.json().catch(() => null);
+        if (clientData?.success === true || clientData?.success === "true") {
+          setSubmitted(true);
+          return;
+        }
+      } catch {
+        // Fall through
+      }
+
       setSendError("Network error. Please reach out directly via email.");
     } finally {
       setLoading(false);

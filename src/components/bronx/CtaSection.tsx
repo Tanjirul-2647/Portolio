@@ -39,6 +39,7 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
     setLastSent(snapshot);
 
     try {
+      // Primary: Send through server-side /api/contact route
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -52,12 +53,74 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
       if (response.ok && (data?.success === true || data?.success === "true")) {
         setStatus("success");
         setFormState({ name: "", email: "", message: "" });
-      } else {
-        setErrorMessage(data?.message || "Something went wrong while sending your message. Please try again.");
-        setStatus("error");
+        return;
       }
+
+      // Secondary fallback: Direct browser submission to FormSubmit
+      try {
+        const clientRes = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: snapshot.name.trim(),
+            email: snapshot.email.trim(),
+            message: snapshot.message.trim(),
+            _subject: subject,
+            _replyto: snapshot.email.trim(),
+            _captcha: "false",
+            _template: "table",
+          }),
+        });
+
+        const clientData = await clientRes.json().catch(() => null);
+        if (clientData?.success === true || clientData?.success === "true") {
+          setStatus("success");
+          setFormState({ name: "", email: "", message: "" });
+          return;
+        }
+      } catch {
+        // Fall through to user-facing fallback
+      }
+
+      setErrorMessage(
+        data?.message ||
+        "Could not deliver automatically. You can send directly using Gmail, Mail app, or WhatsApp below."
+      );
+      setStatus("error");
     } catch {
-      setErrorMessage("Network error. Please try again or reach out directly.");
+      // If server route failed completely (network issue), attempt direct browser submission
+      try {
+        const clientRes = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: snapshot.name.trim(),
+            email: snapshot.email.trim(),
+            message: snapshot.message.trim(),
+            _subject: subject,
+            _replyto: snapshot.email.trim(),
+            _captcha: "false",
+            _template: "table",
+          }),
+        });
+
+        const clientData = await clientRes.json().catch(() => null);
+        if (clientData?.success === true || clientData?.success === "true") {
+          setStatus("success");
+          setFormState({ name: "", email: "", message: "" });
+          return;
+        }
+      } catch {
+        // Fall through
+      }
+
+      setErrorMessage("Network issue. Please send directly using Gmail, Mail app, or WhatsApp below.");
       setStatus("error");
     }
   };
@@ -160,26 +223,55 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
                     style={{
                       background: "rgba(239, 68, 68, 0.12)",
                       border: "1px solid rgba(239, 68, 68, 0.35)",
-                      borderRadius: 10,
-                      padding: "10px 14px",
+                      borderRadius: 12,
+                      padding: "12px 16px",
                       fontSize: 13,
                       color: "#fca5a5",
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: 10,
-                      flexWrap: "wrap",
+                      flexDirection: "column",
+                      gap: 8,
                     }}
                   >
-                    <span>⚠️ {errorMessage}</span>
-                    <a
-                      href={gmailComposeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "#fff", textDecoration: "underline", fontWeight: 600, fontSize: 12 }}
-                    >
-                      Send via Gmail ↗
-                    </a>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+                      <span>⚠️ {errorMessage}</span>
+                    </div>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", paddingTop: 4 }}>
+                      <a
+                        href={gmailComposeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="theme-btn"
+                        style={{ fontSize: 12, padding: "7px 14px" }}
+                      >
+                        Open in Gmail ↗
+                      </a>
+                      <a
+                        href={mailtoUrl}
+                        className="theme-btn2"
+                        style={{ fontSize: 12, padding: "7px 14px" }}
+                      >
+                        Send via Mail App ↗
+                      </a>
+                      <a
+                        href={`https://wa.me/message/SLFQRAGU2NK6H1?text=${encodeURIComponent(`Hi Tanjirul,\n\nName: ${currentName}\nEmail: ${currentEmail}\n\nProject:\n${currentMessage}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: 12,
+                          padding: "7px 14px",
+                          borderRadius: 30,
+                          background: "#25D366",
+                          color: "#fff",
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        WhatsApp ↗
+                      </a>
+                    </div>
                   </div>
                 )}
 
