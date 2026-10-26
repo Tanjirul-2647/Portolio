@@ -25,13 +25,43 @@ export async function POST(request: Request) {
     const userAgent =
       request.headers.get("user-agent") ||
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-    const origin = request.headers.get("origin") || "https://tanjirul.dev";
-    const referer = request.headers.get("referer") || "https://tanjirul.dev";
+    // Always use verified domain to prevent FormSubmit from sending activation links for every unique Vercel preview/deployment domain
+    const verifiedDomain = "https://tanjirul.dev";
 
     let isSuccess = false;
     let serviceMessage = "";
 
-    // Strategy 1: JSON payload with standard browser headers & timeout
+    // Optional Provider: Web3Forms (if access key configured in Vercel environment variables)
+    if (process.env.WEB3FORMS_ACCESS_KEY) {
+      try {
+        const w3Res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: process.env.WEB3FORMS_ACCESS_KEY,
+            name: name.trim(),
+            email: email.trim(),
+            message: message.trim(),
+            subject,
+          }),
+          signal: AbortSignal.timeout(9000),
+        });
+        const w3Data = await w3Res.json().catch(() => null);
+        if (w3Data?.success === true || w3Data?.success === "true") {
+          return NextResponse.json({
+            success: true,
+            message: "Your message has been sent successfully!",
+          });
+        }
+      } catch (w3Err) {
+        console.warn("Web3Forms strategy error:", w3Err instanceof Error ? w3Err.message : w3Err);
+      }
+    }
+
+    // Strategy 1: FormSubmit JSON payload with verified domain headers & timeout
     try {
       const response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
         method: "POST",
@@ -39,8 +69,8 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
           Accept: "application/json",
           "User-Agent": userAgent,
-          Referer: referer,
-          Origin: origin,
+          Referer: `${verifiedDomain}/`,
+          Origin: verifiedDomain,
         },
         body: JSON.stringify({
           name: name.trim(),
@@ -48,6 +78,7 @@ export async function POST(request: Request) {
           message: message.trim(),
           _subject: subject,
           _replyto: email.trim(),
+          _url: verifiedDomain,
           _captcha: "false",
           _template: "table",
         }),
@@ -65,7 +96,7 @@ export async function POST(request: Request) {
       console.warn("FormSubmit JSON strategy error:", err instanceof Error ? err.message : err);
     }
 
-    // Strategy 2: URL-encoded payload fallback
+    // Strategy 2: URL-encoded payload fallback with verified domain
     if (!isSuccess) {
       try {
         const formParams = new URLSearchParams({
@@ -74,6 +105,7 @@ export async function POST(request: Request) {
           message: message.trim(),
           _subject: subject,
           _replyto: email.trim(),
+          _url: verifiedDomain,
           _captcha: "false",
           _template: "table",
         });
@@ -84,8 +116,8 @@ export async function POST(request: Request) {
             "Content-Type": "application/x-www-form-urlencoded",
             Accept: "application/json",
             "User-Agent": userAgent,
-            Referer: referer,
-            Origin: origin,
+            Referer: `${verifiedDomain}/`,
+            Origin: verifiedDomain,
           },
           body: formParams.toString(),
           signal: AbortSignal.timeout(9000),

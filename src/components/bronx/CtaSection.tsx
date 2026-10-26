@@ -85,10 +85,16 @@ export function CtaSection({ onNavigate }: CtaSectionProps) {
         // Fall through to user-facing fallback
       }
 
-      setErrorMessage(
-        data?.message ||
-        "Could not deliver automatically. You can send directly using Gmail, Mail app, or WhatsApp below."
-      );
+      if (data?.needsActivation) {
+        setErrorMessage(
+          "Activation required: Please click 'Activate Form' in the email sent to tanjirul.islam.256@gmail.com, or use the direct options below."
+        );
+      } else {
+        setErrorMessage(
+          data?.message ||
+          "Could not deliver automatically. You can send directly using Gmail, Mail app, or WhatsApp below."
+        );
+      }
       setStatus("error");
     } catch {
       // If server route failed completely (network issue), attempt direct browser submission
